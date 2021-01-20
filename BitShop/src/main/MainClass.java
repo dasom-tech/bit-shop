@@ -81,6 +81,7 @@ class SearchID extends Frame implements WindowListener {
 
 	@Override
 	public void windowClosing(WindowEvent e) {
+		System.exit(0);
 	}
 
 
@@ -175,6 +176,7 @@ class SearchPS extends Frame implements WindowListener {
 
 	@Override
 	public void windowClosing(WindowEvent e) {
+		System.exit(0);
 	}
 
 
@@ -522,6 +524,7 @@ class SignInUI extends Frame implements WindowListener
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
 		dispose();
+		System.exit(0);
 	}
 
 	@Override
@@ -668,7 +671,7 @@ class loginIN extends Frame implements WindowListener
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
+		System.exit(0);
 	}
 
 	@Override
@@ -787,6 +790,7 @@ class memberSignOut extends Frame implements WindowListener {
 
 	@Override
 	public void windowClosing(WindowEvent e) {
+		System.exit(0);
 	}
 
 
@@ -1160,7 +1164,7 @@ class chargeMoney extends Frame implements WindowListener
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
+		System.exit(0);
 		
 	}
 
@@ -1332,6 +1336,7 @@ class UpdateMem extends Frame implements WindowListener
 		// TODO Auto-generated method stub
 		new MenuView();
 		dispose();
+		System.exit(0);
 	}
 
 	@Override
@@ -1448,7 +1453,7 @@ class myorderPage extends Frame implements WindowListener
 
    @Override
    public void windowClosing(WindowEvent e) {
-      // TODO Auto-generated method stub
+	   System.exit(0);
       
    }
 
@@ -1604,6 +1609,7 @@ class itemBuy extends Frame implements WindowListener, ActionListener{
        if(count == 1) tot = price;     // count설정을 안하고 기본값(1)상태로 넘어가면 금액이 0으로 나와서 추가한 코드
        
        new itemPay(tot, count , loginUI.sendID, pno );   // 결제화면
+       dispose();
     }
     else if(title.equals("구입취소")) {
            this.dispose();
@@ -1618,6 +1624,7 @@ class itemBuy extends Frame implements WindowListener, ActionListener{
 
  @Override
  public void windowClosing(WindowEvent e) {
+	 System.exit(0);
  }
 
  @Override
@@ -1763,6 +1770,7 @@ class itemPay extends Frame implements WindowListener {
 
  @Override
  public void windowClosing(WindowEvent e) {
+	 System.exit(0);
  }
 
  @Override
@@ -1815,16 +1823,8 @@ class balance extends Frame implements WindowListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dao.updateBalance( loginUI.sendID, baldon, balpo);
-				try {
-					
-	            if(PrdtOrder.ta.isEnabled())
-	            {
-	               PrdtOrder.ta.append("" + PrdtOrder.show + "      " + PrdtOrder.price[PrdtOrder.j] + "       " + PrdtOrder.count + "        " + PrdtOrder.price[PrdtOrder.j] * PrdtOrder.count
-	                        + "원" + "\n");
-	            }
-				}catch (NullPointerException e2) {
-				}
 				dispose();
+				new myorderPage();
 			}
 		});
 	
@@ -1846,6 +1846,7 @@ class balance extends Frame implements WindowListener {
 
 	@Override
 	public void windowClosing(WindowEvent e) {
+		System.exit(0);
 	}
 
 	@Override
@@ -1875,15 +1876,13 @@ class PrdtOrder extends Frame implements WindowListener {
     static public String show = "";
     static public boolean ok = false;
     static public int j;
-    public static TextArea ta;
     static public int price[] = { 10000, 14000, 4300, 3000, 13000, 5000, 20000, 5000 };
  
     public PrdtOrder() {
  
         // 프레임 설정
         setTitle("상품 주문");
-        setBounds(0, 0, 625, 600);
-        setBackground(Color.black);
+        setBounds(0, 0, 625, 470);
  
         Panel pNorth = new Panel();
         pNorth.setBackground(new Color(255, 255, 215));
@@ -1946,13 +1945,7 @@ class PrdtOrder extends Frame implements WindowListener {
             pNorth.add(l[i]);
             pNorth.add(ok[i]);
         }
- 
-        // 중앙
-        ta = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
-        ta.setText("   상품명        단가        수량        합계\n\n");
-        ta.setBackground(Color.white);
-        ta.setEditable(false);
- 
+  
         // 남쪽
         Panel pSouth = new Panel();
         pSouth.setBackground(new Color(255, 255, 215));
@@ -1972,9 +1965,7 @@ class PrdtOrder extends Frame implements WindowListener {
                     bt[i].setEnabled(true);
                     minus[i].setEnabled(false);
                     plus[i].setEnabled(false);
-                    num[i].setText("0");
-                    ta.setText("   상품명               단가             수량             합계\n\n");
- 
+                    num[i].setText("0"); 
                 }
             }
         });
@@ -1993,7 +1984,6 @@ class PrdtOrder extends Frame implements WindowListener {
       
         
         add(pNorth, BorderLayout.NORTH);
-        add(ta, BorderLayout.CENTER);
         add(pSouth, BorderLayout.SOUTH);
         setVisible(true);
  
@@ -2016,23 +2006,20 @@ class PrdtOrder extends Frame implements WindowListener {
                     counti[o] = 0;
                 }
             });
-            
-            
- 
+          
             // "-" 버튼 이벤트
             minus[i].addActionListener(new ActionListener() {
  
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	counti[o] = counti[o] - 1;
-                    num[o].setText(counti[o] + "");
-                    ok[o].setEnabled(true);
-                    if(counti[o] > 1) {      
-                    	counti[o]--;
-                     } else if ( num[o].getText().equals("1")) {
-                        JOptionPane.showMessageDialog(null, "최초 구매수량은 1개입니다");
-                     }
-                }
+					if (counti[o] > 0) {
+						counti[o]--;
+						num[o].setText(counti[o] + "");
+						ok[o].setEnabled(true);
+					} else {
+						JOptionPane.showMessageDialog(null, "최소 구매수량은 1개입니다");
+					}
+				}
             });
             
             // "+" 버튼 이벤트
@@ -2057,12 +2044,12 @@ class PrdtOrder extends Frame implements WindowListener {
                 	
                 	count = counti[o];
                 	new itemPay(price[o] * counti[o], counti[o], loginUI.sendID, pno[o]);
-                	j = o;
-                    show = bt[o].getActionCommand();
-                    ok[o].setEnabled(false);
+                    dispose();
                    }
+                
             });
-        }
+        }      
+        addWindowListener(this);
     }
 
    @Override
